@@ -79,6 +79,7 @@
       <updated>1561539772498</updated>
       <workItem from="1561539782620" duration="1912000" />
       <workItem from="1561630439126" duration="134000" />
+      <workItem from="1562143143446" duration="97000" />
     </task>
     <task id="LOCAL-00001" summary="acp后台首次提交">
       <created>1561540143834</created>
@@ -98,7 +99,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="2046000" />
+    <option name="totallyTimeSpent" value="2143000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />

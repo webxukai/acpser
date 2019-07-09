@@ -102,12 +102,6 @@ router.all('*', function (req, res, next) {
   next();
 });
 
-/* GET home page. */
-router.post('/', function (req, res, next) {
-  res.render('index', {
-    title: 'Express'
-  });
-});
 
 // 登录接口
 router.post('/login', function (req, res) {
@@ -115,7 +109,10 @@ router.post('/login', function (req, res) {
   let agentPwd = req.body.agentPwd
   console.log(account)
   console.log(agentPwd)
-  res.cookie("name",'zhangsan',{maxAge: 900000, httpOnly: true});  
+  res.cookie("name", 'zhangsan', {
+    maxAge: 900000,
+    httpOnly: true
+  });
   // res.cookie('user', 'lililiwen');
   console.log(req.cookies);
 
@@ -141,6 +138,42 @@ router.post('/login', function (req, res) {
     })
   })
 
+})
+
+// 注册接口
+router.post('/register',function (req,res) {
+  let account = req.body.account
+  let agentPwd = req.body.agentPwd
+  console.log(account)
+  console.log(agentPwd)
+  // res.cookie("name", 'zhangsan', {
+  //   maxAge: 900000,
+  //   httpOnly: true
+  // });
+  // res.cookie('user', 'lililiwen');
+  // console.log(req.cookies);
+
+  const sql = 'SELECT * FROM userInfo' //userInfo 为表名
+  const sql_select = `SELECT *  FROM userInfo WHERE userName = '${account}' AND userPassword = '${agentPwd}'` //user_info 为表名
+
+  connection.query(sql_select, (err, results) => {
+    console.log(111)
+    console.log('err', err)
+    console.log('res', results)
+    if (err) {
+      return res.json({
+        code: 1,
+        message: '用户不存在',
+        affextedRows: 0
+      })
+    }
+    console.log(results)
+    res.json({
+      code: 200,
+      message: results,
+      affextedRows: results.affextedRows
+    })
+  })
 })
 
 
