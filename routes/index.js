@@ -4,6 +4,8 @@ var router = express.Router();
 
 var redis = require('redis')
 
+var loginDao = require('../dao/loginDao')
+
 // var client = redis.createClient(6379, '127.0.0.1')
 // client.on('error', function (err) {
 //   console.log('Error ' + err);
@@ -107,72 +109,53 @@ router.all('*', function (req, res, next) {
 router.post('/login', function (req, res) {
   let account = req.body.account
   let agentPwd = req.body.agentPwd
-  console.log(account)
-  console.log(agentPwd)
-  res.cookie("name", 'zhangsan', {
-    maxAge: 900000,
-    httpOnly: true
-  });
-  // res.cookie('user', 'lililiwen');
-  console.log(req.cookies);
-
-  const sql = 'SELECT * FROM userInfo' //userInfo 为表名
-  const sql_select = `SELECT *  FROM userInfo WHERE userName = '${account}' AND userPassword = '${agentPwd}'` //user_info 为表名
-
-  connection.query(sql_select, (err, results) => {
-    console.log(111)
-    console.log('err', err)
-    console.log('res', results)
-    if (err) {
-      return res.json({
-        code: 1,
-        message: '用户不存在',
-        affextedRows: 0
+  loginDao.userLogin(account, agentPwd, function (results) {
+    console.log(results)
+    if (results.length) {
+      res.json({
+        code: 200,
+        message: {
+          userId: results[0].userId,
+          userName: results[0].userName,
+          res: true
+        }
+      })
+    } else {
+      res.json({
+        code: 200,
+        message: {
+          res: false
+        }
       })
     }
-    console.log(results)
-    res.json({
-      code: 200,
-      message: results,
-      affextedRows: results.affextedRows
-    })
   })
-
 })
 
 // 注册接口
-router.post('/register',function (req,res) {
+router.post('/register', function (req, res) {
   let account = req.body.account
   let agentPwd = req.body.agentPwd
   console.log(account)
   console.log(agentPwd)
-  // res.cookie("name", 'zhangsan', {
-  //   maxAge: 900000,
-  //   httpOnly: true
-  // });
-  // res.cookie('user', 'lililiwen');
-  // console.log(req.cookies);
-
-  const sql = 'SELECT * FROM userInfo' //userInfo 为表名
-  const sql_select = `SELECT *  FROM userInfo WHERE userName = '${account}' AND userPassword = '${agentPwd}'` //user_info 为表名
-
-  connection.query(sql_select, (err, results) => {
-    console.log(111)
-    console.log('err', err)
-    console.log('res', results)
-    if (err) {
-      return res.json({
-        code: 1,
-        message: '用户不存在',
-        affextedRows: 0
-      })
-    }
+  loginDao.userRegister(account,agentPwd,function ( results) {
     console.log(results)
-    res.json({
-      code: 200,
-      message: results,
-      affextedRows: results.affextedRows
-    })
+    // if (results.length) {
+    //   res.json({
+    //     code: 200,
+    //     message: {
+    //       userId: results[0].userId,
+    //       userName: results[0].userName,
+    //       res: true
+    //     }
+    //   })
+    // } else {
+    //   res.json({
+    //     code: 200,
+    //     message: {
+    //       res: false
+    //     }
+    //   })
+    // }
   })
 })
 
