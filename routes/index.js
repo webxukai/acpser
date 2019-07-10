@@ -2,7 +2,9 @@ var express = require('express');
 
 var router = express.Router();
 
-var redis = require('redis')
+// var redis = require('redis')
+
+var formidable = require('formidable');
 
 var loginDao = require('../dao/loginDao')
 
@@ -10,57 +12,57 @@ var loginDao = require('../dao/loginDao')
 // client.on('error', function (err) {
 //   console.log('Error ' + err);
 // });
-var client = redis.createClient(6379, '129.211.47.103')
-client.on('error', function (err) {
-  console.log('Error ' + err);
-});
+// var client = redis.createClient(6379, '129.211.47.103')
+// client.on('error', function (err) {
+//   console.log('Error ' + err);
+// });
 
-// 1 键值对
-client.set('color', 'red', redis.print);
-client.get('color', function (err, value) {
-  if (err) throw err;
-  console.log('Got: ' + value)
-  client.quit();
-})
+// // 1 键值对
+// client.set('color', 'red', redis.print);
+// client.get('color', function (err, value) {
+//   if (err) throw err;
+//   console.log('Got: ' + value)
+//   client.quit();
+// })
 
-client.hmset('kitty', {
-  'age': '2-year-old',
-  'sex': 'male'
-}, redis.print);
-client.hget('kitty', 'age', function (err, value) {
-  if (err) throw err;
-  console.log('kitty is ' + value);
-});
+// client.hmset('kitty', {
+//   'age': '2-year-old',
+//   'sex': 'male'
+// }, redis.print);
+// client.hget('kitty', 'age', function (err, value) {
+//   if (err) throw err;
+//   console.log('kitty is ' + value);
+// });
 
-//哈希表
-client.hkeys('kitty', function (err, keys) {
-  if (err) throw err;
-  keys.forEach(function (key, i) {
-    console.log(key, i);
-  });
-  client.quit();
-});
+// //哈希表
+// client.hkeys('kitty', function (err, keys) {
+//   if (err) throw err;
+//   keys.forEach(function (key, i) {
+//     console.log(key, i);
+//   });
+//   client.quit();
+// });
 
-//链表
-client.lpush('tasks', 'Paint the house red.', redis.print);
-client.lpush('tasks', 'Paint the house green.', redis.print);
-client.lrange('tasks', 0, -1, function (err, items) {
-  if (err) throw err;
-  items.forEach(function (item, i) {
-    console.log(' ' + item);
-  });
-  client.quit();
-});
+// //链表
+// client.lpush('tasks', 'Paint the house red.', redis.print);
+// client.lpush('tasks', 'Paint the house green.', redis.print);
+// client.lrange('tasks', 0, -1, function (err, items) {
+//   if (err) throw err;
+//   items.forEach(function (item, i) {
+//     console.log(' ' + item);
+//   });
+//   client.quit();
+// });
 
-// 集合
-client.sadd('ip', '192.168.3.7', redis.print);
-client.sadd('ip', '192.168.3.7', redis.print);
-client.sadd('ip', '192.168.3.9', redis.print);
-client.smembers('ip', function (err, members) {
-  if (err) throw err;
-  console.log(members);
-  client.quit();
-});
+// // 集合
+// client.sadd('ip', '192.168.3.7', redis.print);
+// client.sadd('ip', '192.168.3.7', redis.print);
+// client.sadd('ip', '192.168.3.9', redis.print);
+// client.smembers('ip', function (err, members) {
+//   if (err) throw err;
+//   console.log(members);
+//   client.quit();
+// });
 
 // // 信道
 // var redis = require('redis')
@@ -148,23 +150,40 @@ router.post('/register', function (req, res) {
         res: true
       }
     })
-    // if (results.length) {
-    //   res.json({
-    //     code: 200,
-    //     message: {
-    //       userId: results[0].insertId,
-    //       userName: account,
-    //       res: true
-    //     }
-    //   })
-    // } else {
-    //   res.json({
-    //     code: 200,
-    //     message: {
-    //       res: false
-    //     }
-    //   })
-    // }
+  })
+})
+
+// 变更图片 
+router.post('/img', function (req, res) {
+  // console.log(req)
+  // let img = req.body
+  // console.log(img)
+
+  var form = new formidable.IncomingForm();
+  form.encoding = 'utf-8';
+  console.log(form)
+  console.log(__dirname)
+  form.uploadDir = path.join(__dirname);
+  form.keepExtensions = true;//保留后缀
+  form.maxFieldsSize = 2 * 1024 * 1024;
+  //处理图片
+  form.parse(req, function (err, fields, files){
+    console.log('+++++++++++++++++')
+    console.log(files)
+      console.log(files.the_file);
+      var filename = files.the_file.name
+      var nameArray = filename.split('.');
+      var type = nameArray[nameArray.length - 1];
+      var name = '';
+      for (var i = 0; i < nameArray.length - 1; i++) {
+          name = name + nameArray[i];
+      }
+      var date = new Date();
+      var time = '_' + date.getFullYear() + "_" + date.getMonth() + "_" + date.getDay() + "_" + date.getHours() + "_" + date.getMinutes();
+      var avatarName = name + time + '.' + type;
+      var newPath = form.uploadDir + "/" + avatarName;
+      fs.renameSync(files.the_file.path, newPath);  //重命名
+      res.send({data:"/upload/"+avatarName})
   })
 })
 
