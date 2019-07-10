@@ -139,12 +139,21 @@ router.post('/register', function (req, res) {
   console.log(agentPwd)
   loginDao.userRegister(account,agentPwd,function ( results) {
     console.log(results)
+
+    res.json({
+      code: 200,
+      message: {
+        userId: results.insertId,
+        userName: account,
+        res: true
+      }
+    })
     // if (results.length) {
     //   res.json({
     //     code: 200,
     //     message: {
-    //       userId: results[0].userId,
-    //       userName: results[0].userName,
+    //       userId: results[0].insertId,
+    //       userName: account,
     //       res: true
     //     }
     //   })
