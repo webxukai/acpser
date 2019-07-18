@@ -77,24 +77,6 @@ var loginDao = require('../dao/loginDao')
 // });
 // clientA.subscribe('main_chat_room');
 
-//使用mysql中间件连接MySQL数据库
-const mysql = require('mysql')
-// const connection = mysql.createConnection({
-//   host: 'localhost', //数据库地址
-//   user: 'root', //用户名
-//   password: 'newpassword', //密码
-//   port: '3306', //端口
-//   database: 'acpser', //库名
-//   multipleStatements: true //允许执行多条语句
-// })
-const connection = mysql.createConnection({
-  host: '129.211.47.103', //数据库地址
-  user: 'root', //用户名
-  password: '123456', //密码
-  port: '3306', //端口
-  database: 'acpser', //库名
-  multipleStatements: true //允许执行多条语句
-})
 
 //设置允许跨域访问该服务.
 router.all('*', function (req, res, next) {
