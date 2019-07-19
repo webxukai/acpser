@@ -21,6 +21,25 @@ function blogWrite(blogName, blogDescription, userId , success) {
     connection.end();
 }
 
+//获取blog列表接口
+function getBlogList( success) {
+    const slq_query = `SELECT blogId,userId,blogName,blogDescription FROM blog;`
+    const connection = dbutil.createConnection();
+    connection.connect();
+    connection.query(slq_query, (err, results) => {
+        console.log('err', err)
+        console.log('res', results)
+        if (err) {
+            return res.json({
+                code: 1,
+                message: '发布失败',
+            })
+        }
+        console.log(results)
+        success(results)
+    })
+    connection.end();
+}
 
 
 
@@ -28,4 +47,5 @@ function blogWrite(blogName, blogDescription, userId , success) {
 
 module.exports = {
     blogWrite,
+    getBlogList
 }

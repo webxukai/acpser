@@ -156,7 +156,22 @@ router.post('/blogWrite', function (req, res) {
   })
 })
 
-// 变更图片 
+// 获取博客列表
+router.post('/getBlogList', function (req, res) {
+
+  blogDao.getBlogList(function ( results) {
+    console.log(results)
+    res.json({
+      code: 200,
+      message: {
+        res: true,
+        results
+      }
+    })
+  })
+})
+
+// 变更图片
 router.post('/img', function (req, res) {
   // console.log(req)
   // let img = req.body
