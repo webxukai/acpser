@@ -7,6 +7,7 @@ var router = express.Router();
 var formidable = require('formidable');
 
 var loginDao = require('../dao/loginDao')
+var blogDao = require('../dao/blogDao')
 
 // var client = redis.createClient(6379, '127.0.0.1')
 // client.on('error', function (err) {
@@ -129,6 +130,26 @@ router.post('/register', function (req, res) {
       message: {
         userId: results.insertId,
         userName: account,
+        res: true
+      }
+    })
+  })
+})
+
+// 写博客接口
+router.post('/blogWrite', function (req, res) {
+  let blogName = req.body.blogTitle
+  let blogDescription = req.body.blogcontent
+  let userId = req.body.userId
+  console.log(blogName)
+  console.log(blogDescription)
+  console.log(userId)
+  blogDao.blogWrite(blogName, blogDescription, userId ,function ( results) {
+    console.log(results)
+
+    res.json({
+      code: 200,
+      message: {
         res: true
       }
     })
