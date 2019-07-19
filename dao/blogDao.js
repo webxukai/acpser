@@ -1,9 +1,9 @@
 const dbutil = require("./DBUtil");
 
 // 发布blog接口
-function blogWrite(blogName, blogDescription, userId , success) {
-    const sql_insert = `INSERT INTO blog (blogName,blogDescription,userId) VALUES ( ? , ? , ? );` //user_info 为表名
-    const params = [blogName, blogDescription,userId]
+function blogWrite(blogName, blogDescription, userId ,blogLove,blogTranspond,blogVisit,blogComment , blogTime , success) {
+    const sql_insert = `INSERT INTO blog (blogName, blogDescription, userId ,blogLove,blogTranspond,blogVisit,blogComment ,blogTime) VALUES ( ? , ? , ? , ? , ? , ? , ?, blogTime);` //user_info 为表名
+    const params = [blogName, blogDescription, userId ,blogLove,blogTranspond,blogVisit,blogComment, blogTime]
     const connection = dbutil.createConnection();
     connection.connect();
     connection.query(sql_insert,params, (err, results) => {
@@ -23,7 +23,7 @@ function blogWrite(blogName, blogDescription, userId , success) {
 
 //获取blog列表接口
 function getBlogList( success) {
-    const slq_query = `SELECT blogId,userId,blogName,blogDescription FROM blog;`
+    const slq_query = `SELECT blogName, blogDescription, userId ,blogLove,blogTranspond,blogVisit,blogComment , blogTime FROM blog;`
     const connection = dbutil.createConnection();
     connection.connect();
     connection.query(slq_query, (err, results) => {

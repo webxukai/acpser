@@ -141,10 +141,15 @@ router.post('/blogWrite', function (req, res) {
   let blogName = req.body.blogTitle
   let blogDescription = req.body.blogcontent
   let userId = req.body.userId
+  let blogLove = req.body.blogLove
+  let blogTranspond = req.body.blogTranspond
+  let blogVisit = req.body.blogVisit
+  let blogComment = req.body.blogComment
+  let blogTime = req.body.blogTime
   console.log(blogName)
   console.log(blogDescription)
   console.log(userId)
-  blogDao.blogWrite(blogName, blogDescription, userId ,function ( results) {
+  blogDao.blogWrite(blogName, blogDescription, userId ,blogLove,blogTranspond,blogVisit,blogComment, blogTime ,function ( results) {
     console.log(results)
 
     res.json({
