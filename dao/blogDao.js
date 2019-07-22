@@ -2,7 +2,7 @@ const dbutil = require("./DBUtil");
 
 // 发布blog接口
 function blogWrite(blogName, blogDescription, userId ,blogLove,blogTranspond,blogVisit,blogComment , blogTime , success) {
-    const sql_insert = `INSERT INTO blog (blogName, blogDescription, userId ,blogLove,blogTranspond,blogVisit,blogComment ,blogTime) VALUES ( ? , ? , ? , ? , ? , ? , ?, blogTime);` //user_info 为表名
+    const sql_insert = `INSERT INTO blog (blogName, blogDescription, userId ,blogLove,blogTranspond,blogVisit,blogComment ,blogTime) VALUES ( ? , ? , ? , ? , ? , ? , ?, ?);` //user_info 为表名
     const params = [blogName, blogDescription, userId ,blogLove,blogTranspond,blogVisit,blogComment, blogTime]
     const connection = dbutil.createConnection();
     connection.connect();
